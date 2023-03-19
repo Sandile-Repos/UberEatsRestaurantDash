@@ -33,11 +33,7 @@ const DetailedOrder = () => {
       </div>
       <Divider />
       <div style={styles.buttonsContainer}>
-        <Button
-          block
-          style={{ ...styles.button, backgroundColor: "red" }}
-          size="large"
-        >
+        <Button block danger style={{ ...styles.button }} size="large">
           Decline Order
         </Button>
         <Button block style={styles.button} type="primary" size="large">

@@ -23,3 +23,8 @@ li.ant-pagination-item-active a {
 .ant-menu-item-active {
   color: #3fc060 !important;
 }
+.ant-form-item-control-input :active,
+.ant-form-item-control-input :hover,
+.ant-form-item-control-input :focus {
+  border-color: #3fc060 !important;
+}

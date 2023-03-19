@@ -1,8 +1,7 @@
-import DetailedOrder from "./modules/DetailedOrder";
-import Orders from "./modules/Orders";
-import { Route, Routes } from "react-router-dom";
 import { Layout, Image } from "antd";
 import SideMenu from "./components/SideMenu";
+
+import AppRoutes from "./components/AppRoutes";
 
 const { Sider, Content, Footer } = Layout;
 
@@ -18,10 +17,7 @@ function App() {
       </Sider>
       <Layout>
         <Content>
-          <Routes>
-            <Route path="" element={<Orders />} />
-            <Route path="order/:id" element={<DetailedOrder />} />
-          </Routes>
+          <AppRoutes />
         </Content>
         <Footer style={{ textAlign: "center" }}>
           Uber Eats Restaurant Dashboard &copy; 2022
