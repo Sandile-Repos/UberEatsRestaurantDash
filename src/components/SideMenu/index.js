@@ -1,6 +1,7 @@
 import React from "react";
 import { Menu } from "antd";
 import { useNavigate } from "react-router-dom";
+import { Auth } from "aws-amplify";
 
 const SideMenu = () => {
   const navigate = useNavigate();
@@ -21,10 +22,19 @@ const SideMenu = () => {
       key: "settings",
       label: "Settings",
     },
+    {
+      key: "signOut",
+      label: "Sign Out",
+      danger: true,
+    },
   ];
-  const onMenuItemClicked = (menuItem) => {
-    console.log(menuItem);
-    navigate(menuItem.key);
+  const onMenuItemClicked = async (menuItem) => {
+    if (menuItem.key === "signOut") {
+      await Auth.signOut();
+      window.location.reload(); // to refresh the page and get rid of state after signing out
+    } else {
+      navigate(menuItem.key);
+    }
   };
 
   return (
