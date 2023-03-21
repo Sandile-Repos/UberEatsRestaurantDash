@@ -1,27 +1,56 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Table, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
 
-import orders from "../../assets/data/orders.json";
+import { DataStore } from "aws-amplify";
+import { Order, OrderStatus } from "../../models";
 
 const Orders = () => {
+  const [orders, setOrders] = useState();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    DataStore.query(Order).then(setOrders);
+  }, []);
+
+  // console.log(orders);
   const renderOrderStatus = (orderStatus) => {
-    if (orderStatus === "Accepted") {
-      return <Tag color={"green"}>{orderStatus}</Tag>;
-    }
-    if (orderStatus === "Pending") {
-      return <Tag color={"orange"}>{orderStatus}</Tag>;
-    }
-    if (orderStatus === "Declined") {
-      return <Tag color={"red"}>{orderStatus}</Tag>;
-    }
+    //   let color = "grey";
+    //   if (orderStatus === OrderStatus.NEW) {
+    //     color = "green";
+    //   }
+    //   if (orderStatus === OrderStatus.COOKING) {
+    //     color = "orange";
+    //   }
+    //   if (orderStatus === OrderStatus.READY_FOR_PICKUP) {
+    //     color = "red";
+    //   }
+    //   return <Tag color={color}>{orderStatus}</Tag>;
+
+    //Switch statement
+
+    // Or below:
+
+    // const statusToColor ={
+    //   NEW: 'green',
+    //   COOKING: 'orange',
+    //   READY_FOR_PICKUP: 'red',
+    // }
+    // return <Tag color={statusToColor[orderStatus]}>{orderStatus}</Tag>;
+
+    //rather  status from database and make them dynamic
+    const statusToColor = {
+      [OrderStatus.NEW]: "green",
+      [OrderStatus.COOKING]: "orange",
+      [OrderStatus.READY_FOR_PICKUP]: "red",
+    };
+    return <Tag color={statusToColor[orderStatus]}>{orderStatus}</Tag>;
   };
   const tableColumns = [
     {
       title: "Order ID",
-      dataIndex: "orderID",
-      key: "orderID",
+      dataIndex: "id",
+      key: "id",
     },
     {
       title: "Delivery Address",
@@ -30,9 +59,9 @@ const Orders = () => {
     },
     {
       title: "Price",
-      dataIndex: "price",
-      key: "price",
-      render: (price) => `R ${price}`,
+      dataIndex: "total",
+      key: "total",
+      render: (price) => `R ${price.toFixed(2)}`,
     },
     {
       title: "Delivery Address",

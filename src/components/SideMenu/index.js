@@ -2,9 +2,12 @@ import React from "react";
 import { Menu } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Auth } from "aws-amplify";
+import { useRestaurantContext } from "../../contexts/RestaurantContext.js";
 
 const SideMenu = () => {
   const navigate = useNavigate();
+  const { restaurant } = useRestaurantContext();
+
   const menuItems = [
     {
       key: "/",
@@ -38,8 +41,11 @@ const SideMenu = () => {
   };
 
   return (
-    <Menu items={menuItems} onClick={onMenuItemClicked} />
-    //   <Menu items={menuItems} onClick={(menuItem)=>navigate(menuItem.key)} />
+    <>
+      {restaurant && <h4>{restaurant.name}</h4>}
+      <Menu items={menuItems} onClick={onMenuItemClicked} />
+      {/* <Menu items={menuItems} onClick={(menuItem)=>navigate(menuItem.key)} /> */}
+    </>
   );
 };
 
