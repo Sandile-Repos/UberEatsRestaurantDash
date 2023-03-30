@@ -30,7 +30,7 @@ const RestaurantContextProvider = ({ children }) => {
   console.log(restaurant);
 
   return (
-    <RestaurantContext.Provider value={{ restaurant }}>
+    <RestaurantContext.Provider value={{ restaurant, sub, setRestaurant }}>
       {children}
     </RestaurantContext.Provider>
   );

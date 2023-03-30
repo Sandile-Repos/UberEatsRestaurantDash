@@ -15,7 +15,7 @@ const CreateMenuItem = () => {
         <Form.Item label="Price (R)" required>
           <InputNumber />
         </Form.Item>
-        <Form.Item label="Price (R)" required>
+        <Form.Item required>
           <Button type="primary">Submit</Button>
         </Form.Item>
       </Form>

@@ -62,7 +62,7 @@ const styles = {
   },
   button: {
     marginRight: 20,
-    marginLeft: 20,
+    // marginLeft: 20,
   },
 };
 export default DetailedOrder;

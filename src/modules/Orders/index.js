@@ -13,7 +13,7 @@ const Orders = () => {
     DataStore.query(Order).then(setOrders);
   }, []);
 
-  // console.log(orders);
+  console.log(orders);
   const renderOrderStatus = (orderStatus) => {
     //   let color = "grey";
     //   if (orderStatus === OrderStatus.NEW) {
@@ -38,7 +38,7 @@ const Orders = () => {
     // }
     // return <Tag color={statusToColor[orderStatus]}>{orderStatus}</Tag>;
 
-    //rather  status from database and make them dynamic
+    //rather use  status from database and make them dynamic
     const statusToColor = {
       [OrderStatus.NEW]: "green",
       [OrderStatus.COOKING]: "orange",
@@ -62,11 +62,6 @@ const Orders = () => {
       dataIndex: "total",
       key: "total",
       render: (price) => `R ${price.toFixed(2)}`,
-    },
-    {
-      title: "Delivery Address",
-      dataIndex: "deliveryAddress",
-      key: "orderID",
     },
     {
       title: "Status",
