@@ -44,6 +44,22 @@ const Orders = () => {
     ).then(setOrders);
   }, [restaurant]);
 
+  useEffect(() => {
+    if (!restaurant.id) {
+      return;
+    }
+    const subscription = DataStore.observe(Order).subscribe((msg) => {
+      // create order on amplify console and link user and restaurant
+      console.log(msg);
+      // subscribe to order updates
+      const { opType, element } = msg;
+      if (opType === "INSERT" && element.orderRestaurantId === restaurant.id) {
+        setOrders((existingOrders) => [element, ...existingOrders]);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [restaurant.id]);
+
   // console.log(orders);
   const renderOrderStatus = (orderStatus) => {
     //   let color = "grey";
