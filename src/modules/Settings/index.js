@@ -41,37 +41,45 @@ const Settings = () => {
 
   const createRestaurant = async () => {
     // console.log("Creating a new restaurant", name, address, coordinates);
-    const newRestaurant = await DataStore.save(
-      new Restaurant({
-        name,
-        image:
-          "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/uber-eats/restaurant1.jpeg",
-        deliveryFee: 0,
-        minDeliveryTime: 15,
-        maxDeliveryTime: 120,
-        address: address.label,
-        lat: coordinates.lat,
-        lng: coordinates.lng,
-        adminSub: sub,
-      })
-    );
-    setRestaurant(newRestaurant);
-    message.success("Restaurant has been created!");
+    try {
+      const newRestaurant = await DataStore.save(
+        new Restaurant({
+          name,
+          image:
+            "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/uber-eats/restaurant1.jpeg",
+          deliveryFee: 0,
+          minDeliveryTime: 15,
+          maxDeliveryTime: 120,
+          address: address.label,
+          lat: coordinates.lat,
+          lng: coordinates.lng,
+          adminSub: sub,
+        })
+      );
+      setRestaurant(newRestaurant);
+      message.success("Restaurant has been created!");
+    } catch (error) {
+      console.log("Failed to createRestaurant", error);
+    }
   };
 
   const updateRestaurant = async () => {
-    const updatedRestaurant = await DataStore.save(
-      Restaurant.copyOf(restaurant, (updated) => {
-        updated.name = name;
-        if (address) {
-          updated.address = address.label;
-          updated.lat = coordinates.lat;
-          updated.lng = coordinates.lng;
-        }
-      })
-    );
-    setRestaurant(updatedRestaurant);
-    message.success("Restaurant updated");
+    try {
+      const updatedRestaurant = await DataStore.save(
+        Restaurant.copyOf(restaurant, (updated) => {
+          updated.name = name;
+          if (address) {
+            updated.address = address.label;
+            updated.lat = coordinates.lat;
+            updated.lng = coordinates.lng;
+          }
+        })
+      );
+      setRestaurant(updatedRestaurant);
+      message.success("Restaurant updated");
+    } catch (error) {
+      console.log("Failed to updateRestaurant", error);
+    }
   };
 
   return (

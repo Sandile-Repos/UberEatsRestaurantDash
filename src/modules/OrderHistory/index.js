@@ -1,53 +1,76 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Table, Tag } from "antd";
 
-import ordersHistory from "../../assets/data/orders-history.json";
+// import ordersHistory from "../../assets/data/orders-history.json";
+import { useRestaurantContext } from "../../contexts/RestaurantContext.js";
+import { DataStore } from "aws-amplify";
+import { Order, OrderStatus } from "../../models";
+import { useNavigate } from "react-router-dom";
 
 const OrderHistory = () => {
-  //   const renderOrderStatus = (orderStatus) => {
-  //     if (orderStatus === "Delivered") {
-  //       return <Tag color={"green"}>{orderStatus}</Tag>;
-  //     }
-  //     return <Tag color={"red"}>{orderStatus}</Tag>;
-  //   };
+  const [orders, setOrders] = useState();
+  const { restaurant } = useRestaurantContext();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!restaurant) {
+      return;
+    }
+    //filter restaurant with certain statuses usinf or keyword
+    DataStore.query(
+      Order,
+      (order) => order.orderRestaurantId.eq(restaurant.id)
+      // .or((order) =>
+      //   order.status.eq("PICKED_UP")
+      // .status.eq("COMPLETED")
+      //   .status.eq("DECLINED_BY_RESTAURANT")
+    ).then(setOrders);
+  }, [restaurant]);
+
+  const renderOrderStatus = (orderStatus) => {
+    const statusToColor = {
+      [OrderStatus.PICKED_UP]: "orange",
+      [OrderStatus.COMPLETED]: "green",
+      [OrderStatus.DECLINED_BY_RESTAURANT]: "red",
+    };
+    return <Tag color={statusToColor[orderStatus]}>{orderStatus}</Tag>;
+  };
+
   const tableColumns = [
     {
       title: "Order ID",
-      dataIndex: "orderID",
-      key: "orderID",
+      dataIndex: "id",
+      key: "id",
     },
     {
-      title: "Delivery Address",
-      dataIndex: "deliveryAddress",
-      key: "deliveryAddress",
+      title: "Created at",
+      dataIndex: "createdAt",
+      key: "createdAt",
     },
     {
       title: "Price",
-      dataIndex: "price",
-      key: "price",
-      render: (price) => `R ${price}`,
-    },
-    {
-      title: "Delivery Address",
-      dataIndex: "deliveryAddress",
-      key: "orderID",
+      dataIndex: "total",
+      key: "total",
+      render: (price) => `R ${price.toFixed(2)}`,
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (status) => (
-        <Tag color={status === "Delivered" ? "green" : "red"}>{status}</Tag>
-      ),
+      render: renderOrderStatus,
     },
   ];
 
   return (
     <Card title={"Order History"} style={{ margin: 20 }}>
       <Table
-        dataSource={ordersHistory}
+        dataSource={orders}
         columns={tableColumns}
-        rowKey="orderID"
+        rowKey="id"
+        onRow={(orderItem) => ({
+          onClick: () => navigate(`/order/${orderItem.id}`), // the trailing forward slash helps in not adding page to order-history but going to orders
+        })}
       />
     </Card>
   );
