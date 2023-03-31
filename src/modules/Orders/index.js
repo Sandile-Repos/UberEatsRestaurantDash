@@ -16,10 +16,19 @@ const Orders = () => {
     if (!restaurant) {
       return;
     }
-    //filter restaurant with certain statuses usinf or keyword
     DataStore.query(
       Order,
-      (order) => order.orderRestaurantId.eq(restaurant.id)
+      (o) =>
+        o.and((o) => [
+          o.orderRestaurantId.eq(restaurant.id),
+          o.or((o) => [
+            o.status.eq("NEW"),
+            o.status.eq("COOKING"),
+            o.status.eq("ACCEPTED"),
+            o.status.eq("READY_FOR_PICKUP"),
+          ]),
+        ])
+
       // .or((order) =>
       //   order.status.eq("NEW")
       // .status.eq("COOKING")

@@ -18,13 +18,15 @@ const OrderHistory = () => {
       return;
     }
     //filter restaurant with certain statuses usinf or keyword
-    DataStore.query(
-      Order,
-      (order) => order.orderRestaurantId.eq(restaurant.id)
-      // .or((order) =>
-      //   order.status.eq("PICKED_UP")
-      // .status.eq("COMPLETED")
-      //   .status.eq("DECLINED_BY_RESTAURANT")
+    DataStore.query(Order, (o) =>
+      o.and((o) => [
+        o.orderRestaurantId.eq(restaurant.id),
+        o.or((c) => [
+          o.status.eq("PICKED_UP"),
+          o.status.eq("COMPLETED"),
+          o.status.eq("DECLINED_BY_RESTAURANT"),
+        ]),
+      ])
     ).then(setOrders);
   }, [restaurant]);
 
