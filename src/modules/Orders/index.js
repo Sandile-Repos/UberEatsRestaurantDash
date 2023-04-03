@@ -45,7 +45,7 @@ const Orders = () => {
   }, [restaurant]);
 
   useEffect(() => {
-    if (!restaurant.id) {
+    if (!restaurant?.id) {
       return;
     }
     const subscription = DataStore.observe(Order).subscribe((msg) => {
@@ -58,7 +58,7 @@ const Orders = () => {
       }
     });
     return () => subscription.unsubscribe();
-  }, [restaurant.id]);
+  }, [restaurant?.id]);
 
   // console.log(orders);
   const renderOrderStatus = (orderStatus) => {
